@@ -7,6 +7,10 @@ Chrome の縦タブモードで使う前提の、タブ数をスマートに管�
 仕様は `docs/spec.md`、構成は `docs/architecture.md` に記載している。
 **仕様・構成・設定項目・権限・ディレクトリ構成を変更したら、同じ変更の中で該当する docs も更新する。**
 
+## ストア提出素材
+
+`store/` に Chrome Web Store 用の掲載文(`listing/`)・画像テンプレート・生成画像を置く。機能や権限を変えたら `store/listing/*.md` の説明・権限の理由も更新し、画像は `store/render.sh` で再生成する。詳細は `store/README.md`。
+
 ## コマンド
 
 ```bash

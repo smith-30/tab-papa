@@ -7,6 +7,12 @@ const manifest: ManifestV3Export = {
   name: 'tab-papa',
   version: pkg.version,
   description: 'Smart tab-count management for Chrome vertical tabs',
+  icons: {
+    '16': 'icons/icon-16.png',
+    '32': 'icons/icon-32.png',
+    '48': 'icons/icon-48.png',
+    '128': 'icons/icon-128.png',
+  },
   permissions: ['tabs', 'tabGroups', 'storage', 'alarms'],
   background: {
     service_worker: 'src/background/index.ts',
@@ -15,6 +21,12 @@ const manifest: ManifestV3Export = {
   action: {
     default_popup: 'src/popup/index.html',
     default_title: 'tab-papa',
+    default_icon: {
+      '16': 'icons/icon-16.png',
+      '32': 'icons/icon-32.png',
+      '48': 'icons/icon-48.png',
+      '128': 'icons/icon-128.png',
+    },
   },
 };
 

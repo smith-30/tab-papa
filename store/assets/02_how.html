@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<style>
+  body { padding: 90px 110px; }
+  h1 { font-size: 48px; font-weight: 800; text-align: center; margin-bottom: 12px; }
+  .sub { text-align: center; font-size: 20px; margin-bottom: 64px; }
+  .steps { display: flex; gap: 28px; }
+  .card { flex: 1; padding: 32px 28px; border-radius: 22px; background: #141418; border: 1px solid #2a2a33; position: relative; }
+  .card::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 3px; border-radius: 22px 22px 0 0; background: linear-gradient(90deg, #6366f1, #06b6d4); }
+  .n { font-size: 15px; font-weight: 800; color: #22d3ee; margin-bottom: 14px; }
+  .emoji { font-size: 44px; margin-bottom: 14px; }
+  h2 { font-size: 26px; margin-bottom: 12px; }
+  .card p { font-size: 17px; line-height: 1.75; color: #a1a1aa; }
+  .tag { display: inline-block; margin-top: 18px; padding: 6px 12px; border-radius: 999px; font-size: 13px; background: rgba(34,211,238,.12); border: 1px solid rgba(34,211,238,.35); color: #67e8f9; }
+  .foot { margin-top: 46px; text-align: center; font-size: 19px; }
+</style></head>
+<body>
+  <h1><span class="grad">使っていない間に、自動で整理</span></h1>
+  <p class="sub muted">ブラウジング中のタブは、絶対に閉じません。</p>
+  <div class="steps">
+    <div class="card"><div class="n">STEP 1</div><div class="emoji">🪟</div><h2>Chrome を離れる</h2>
+      <p>別のアプリに切り替えて Chrome のフォーカスが外れると、待機を開始します。</p><span class="tag">既定 60 秒待機</span></div>
+    <div class="card"><div class="n">STEP 2</div><div class="emoji">📏</div><h2>はみ出しを判定</h2>
+      <p>ウィンドウの高さから縦タブ一覧に収まる行数を推定。維持率(既定 80%)を超えていたら対象にします。</p><span class="tag">維持率を設定可能</span></div>
+    <div class="card"><div class="n">STEP 3</div><div class="emoji">🧹</div><h2>古い順に片付ける</h2>
+      <p>最後に開いた時刻が古いタブから閉じて、目標の行数まで減らします。</p><span class="tag">戻ったらすぐ中断</span></div>
+  </div>
+  <p class="foot muted">ピン留め・アクティブ・音声再生中・折りたたみグループ内のタブは常に保護されます</p>
+</body></html>

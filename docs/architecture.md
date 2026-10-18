@@ -28,6 +28,8 @@ src/
   popup/               ポップアップ UI(現状は最小の骨組みのみ)
 tests/                 vitest。lib は node 環境、コンポーネントは jsdom
 docs/                  仕様・構成
+store/                 Chrome Web Store 提出素材(掲載文・画像テンプレート・生成画像)。詳細は store/README.md
+public/icons/          拡張アイコン(store/icon.svg から生成)
 .github/workflows/     ci.yml(format → lint → typecheck → secretlint → test → build)、scorecard.yml
 ```
 
