@@ -7,7 +7,7 @@ const manifest: ManifestV3Export = {
   name: 'tab-papa',
   version: pkg.version,
   description: 'Smart tab-count management for Chrome vertical tabs',
-  permissions: ['tabs', 'storage', 'alarms'],
+  permissions: ['tabs', 'tabGroups', 'storage', 'alarms'],
   background: {
     service_worker: 'src/background/index.ts',
     type: 'module',
