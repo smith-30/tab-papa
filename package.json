@@ -1,0 +1,36 @@
+{
+  "name": "tab-papa",
+  "version": "0.0.0",
+  "description": "Vertical-tab-optimized tab manager for Chrome",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint src tests",
+    "lint:fix": "oxlint --fix src tests",
+    "format": "oxfmt src tests *.ts",
+    "format:check": "oxfmt --check src tests *.ts"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=24"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.9.0",
+      "onFail": "download"
+    }
+  },
+  "type": "module",
+  "devDependencies": {
+    "@secretlint/secretlint-rule-preset-recommend": "^13.0.7",
+    "@types/chrome": "^0.3.5",
+    "oxfmt": "^0.73.0",
+    "oxlint": "^1.88.0",
+    "secretlint": "^13.0.7",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  }
+}

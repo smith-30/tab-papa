@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pnpm format 2>&1 | tail -1 && pnpm lint 2>&1"
+          }
+        ]
+      }
+    ]
+  }
+}

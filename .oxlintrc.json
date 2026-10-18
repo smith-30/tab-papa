@@ -1,0 +1,30 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "import", "vitest"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn"
+  },
+  "rules": {
+    // TypeScript: 型安全を維持しつつ現実的な設定に
+    "typescript/consistent-type-imports": "error",
+    "no-unused-vars": "off",
+    "typescript/no-unused-vars": "error",
+
+    // unicorn: oxlint 実装済みルールのみ
+    "unicorn/no-useless-undefined": "warn",
+    "unicorn/prefer-dom-node-append": "warn",
+    "unicorn/prefer-query-selector": "warn",
+    "unicorn/throw-new-error": "error",
+
+    // CSS side-effect import
+    "import/no-unassigned-import": ["warn", { "allow": ["**/*.css"] }]
+  },
+  "env": {
+    "builtin": true,
+    "browser": true,
+    "es2022": true
+  },
+  "ignorePatterns": ["dist/**"]
+}
