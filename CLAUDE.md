@@ -1,6 +1,6 @@
 # tab-papa — Claude 向けガイド
 
-Chrome の縦タブモードに最適化したタブマネージャ。[tab-mama](../tab-mama) の構成を踏襲している。
+Chrome の縦タブモードで使う前提の、タブ数をスマートに管理する拡張機能。一覧 UI は Chrome 本体の縦タブに任せ、拡張側は整理(放置タブの自動クローズ・重複整理など)とポップアップ設定に徹する。[tab-mama](../tab-mama) の構成を踏襲している。
 
 ## コマンド
 
@@ -30,4 +30,4 @@ Scorecard は `scorecard.yml` で毎週実行。
 
 - フォーマット(`.oxfmtrc.json`): `singleQuote`、`trailingComma: "all"`、`printWidth: 100`、`sortImports`
 - リント(`.oxlintrc.json`): `correctness: error`、`suspicious/perf: warn`、`typescript/consistent-type-imports: error`
-- スタック: Preact + Tailwind v4(サイドパネル、MV3)。shadcn 系(Radix/Base UI)は react 前提のため `preact/compat` alias 経由で使う。
+- スタック: Preact + Tailwind v4(ポップアップ、MV3)。shadcn 系(Radix/Base UI)は react 前提のため `preact/compat` alias 経由で使う。

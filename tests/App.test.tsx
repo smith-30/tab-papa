@@ -2,7 +2,7 @@
 import { render, screen } from '@testing-library/preact';
 import { describe, expect, it } from 'vitest';
 
-import { App } from '../src/sidepanel/App';
+import { App } from '../src/popup/App';
 
 describe('App', () => {
   it('renders the title', () => {

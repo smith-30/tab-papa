@@ -1,2 +1,2 @@
-// アクションアイコンのクリックでサイドパネルを開く
-void chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
+// タブ整理のイベント配線はここに集約する(MV3: タイマーは chrome.alarms を使う)
+export {};
