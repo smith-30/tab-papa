@@ -5,6 +5,8 @@ Chrome の縦タブモードに最適化したタブマネージャ。[tab-mama]
 ## コマンド
 
 ```bash
+pnpm dev           # 開発ビルド(vite + crxjs)
+pnpm build         # dist/ へビルド
 pnpm test          # 単体テスト(vitest)
 pnpm test:watch    # ウォッチモード
 pnpm typecheck     # tsc --noEmit
@@ -21,11 +23,11 @@ prek を使用。コミット時に oxfmt → oxlint → zizmor(workflow 変更�
 
 ## CI(`.github/workflows/ci.yml`)
 
-format:check → lint → typecheck → secretlint → test。action は全て commit SHA で固定し、Dependabot で更新する。
+format:check → lint → typecheck → secretlint → test → build。action は全て commit SHA で固定し、Dependabot で更新する。
 Scorecard は `scorecard.yml` で毎週実行。
 
 ## コード品質ルール
 
 - フォーマット(`.oxfmtrc.json`): `singleQuote`、`trailingComma: "all"`、`printWidth: 100`、`sortImports`
 - リント(`.oxlintrc.json`): `correctness: error`、`suspicious/perf: warn`、`typescript/consistent-type-imports: error`
-- UI フレームワーク導入時は oxlint の `plugins` に `react` / `react-perf` を追加する。
+- スタック: Preact + Tailwind v4(サイドパネル、MV3)。shadcn 系(Radix/Base UI)は react 前提のため `preact/compat` alias 経由で使う。

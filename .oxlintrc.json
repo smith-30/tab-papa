@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["typescript", "unicorn", "oxc", "import", "vitest"],
+  "plugins": ["typescript", "unicorn", "oxc", "react", "react-perf", "import", "vitest"],
   "categories": {
     "correctness": "error",
     "suspicious": "warn",
@@ -11,6 +11,11 @@
     "typescript/consistent-type-imports": "error",
     "no-unused-vars": "off",
     "typescript/no-unused-vars": "error",
+
+    // React: Hooks ルールを厳守、新 JSX transform なので import 不要
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "warn",
+    "react/react-in-jsx-scope": "off",
 
     // unicorn: oxlint 実装済みルールのみ
     "unicorn/no-useless-undefined": "warn",

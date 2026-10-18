@@ -4,6 +4,8 @@
   "description": "Vertical-tab-optimized tab manager for Chrome",
   "private": true,
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
@@ -25,12 +27,26 @@
   },
   "type": "module",
   "devDependencies": {
+    "@crxjs/vite-plugin": "^3.0.0",
+    "@preact/preset-vite": "^2.10.6",
     "@secretlint/secretlint-rule-preset-recommend": "^13.0.7",
+    "@tailwindcss/vite": "^4.3.3",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/preact": "^3.2.4",
+    "@testing-library/user-event": "^14.6.8",
     "@types/chrome": "^0.3.5",
+    "jsdom": "^30.1.3",
     "oxfmt": "^0.73.0",
     "oxlint": "^1.88.0",
     "secretlint": "^13.0.7",
+    "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
+    "vite": "^8.3.4",
     "vitest": "^5.0.5"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "preact": "^11.0.1",
+    "tailwind-merge": "^3.7.0"
   }
 }
