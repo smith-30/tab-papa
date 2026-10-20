@@ -15,10 +15,11 @@ shot() { # <html名> <出力パス> <幅> <高さ>
   echo "wrote ${2#"$ROOT"/} (${3}x${4})"
 }
 
-# Chrome Web Store スクリーンショット(1280x800)
+# Chrome Web Store スクリーンショット(1280x800)。04 は実画面(先に store/capture-popup.sh で popup.png を作る)
 shot 01_hero    "$ROOT/screenshots/01_hero.png"    1280 800
 shot 02_how     "$ROOT/screenshots/02_how.png"     1280 800
 shot 03_privacy "$ROOT/screenshots/03_privacy.png" 1280 800
+shot 04_settings "$ROOT/screenshots/04_settings.png" 1280 800
 
 # プロモーション画像
 shot promo-small "$ROOT/promo/small-440x280.png"    440  280
