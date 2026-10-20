@@ -4,6 +4,8 @@ const DEBUG_BUILD = import.meta.env.MODE === 'development';
 /** 設定の初期値。縦タブの寸法は Chrome のバージョンや環境で変わるため暫定値(実機で要調整)。 */
 export const DEFAULT_SETTINGS = {
   enabled: true,
+  /** スイープ後にグループ外のタブをドメイン順に並べ替える */
+  sortByDomain: true,
   /** 見える行数に対して維持する割合(%) */
   keepPercent: 80,
   /** 縦タブ 1 行の高さ(px) */

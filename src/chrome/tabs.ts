@@ -1,4 +1,5 @@
 import { estimateCapacity, targetRows } from '../lib/capacity';
+import { type SortTab, hostnameOf, planDomainSort } from '../lib/domainSort';
 import type { GroupInfo, TabInfo } from '../lib/sweep';
 import { selectSweep, usedRows } from '../lib/sweep';
 import type { Settings } from '../storage/settings';
@@ -54,4 +55,32 @@ export async function sweepWindow(
     target,
     closed: ids.length,
   };
+}
+
+/** 1 ウィンドウ分をドメイン順に並べ替え、動かしたタブ数を返す */
+export async function sortWindowByDomain(win: chrome.windows.Window): Promise<number> {
+  if (win.id === undefined || win.type !== 'normal') return 0;
+
+  // スイープで閉じた直後は index がずれているため、必ず取り直す
+  const tabs = await chrome.tabs.query({ windowId: win.id });
+  const sortTabs = tabs.flatMap((t): SortTab[] =>
+    t.id === undefined
+      ? []
+      : [
+          {
+            id: t.id,
+            index: t.index,
+            hostname: hostnameOf(t.url),
+            pinned: t.pinned,
+            groupId: t.groupId,
+          },
+        ],
+  );
+  const moves = planDomainSort(sortTabs);
+  // 前の move による index のずれを織り込んだ計画なので、順番に適用する
+  for (const { tabId, index } of moves) {
+    // oxlint-disable-next-line eslint/no-await-in-loop
+    await chrome.tabs.move(tabId, { index });
+  }
+  return moves.length;
 }

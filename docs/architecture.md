@@ -19,10 +19,11 @@ src/
   lib/               Chrome API に依存しない純粋関数
     capacity.ts        容量の推定・目標行数
     sweep.ts           使用行数の計算・スイープ対象の選定
+    domainSort.ts      ドメイン順の並べ替え計画(move の列)
   storage/
     settings.ts        設定の正規化(純粋)と chrome.storage の読み書き
   chrome/
-    tabs.ts            chrome.tabs / tabGroups / windows との変換・スイープ実行
+    tabs.ts            chrome.tabs / tabGroups / windows との変換・スイープと並べ替えの実行
   background/
     index.ts           Service Worker。フォーカス検知と alarms の配線
   popup/               ポップアップ UI(現状は最小の骨組みのみ)
@@ -53,4 +54,7 @@ windows.onFocusChanged(NONE)
       → estimateCapacity → targetRows lib/capacity.ts
       → selectSweep                   lib/sweep.ts
       → tabs.remove(ids)
+  → 各通常ウィンドウ(sortByDomain 有効時):
+      tabs.query で取り直し → planDomainSort   lib/domainSort.ts
+      → tabs.move(順に適用)
 ```

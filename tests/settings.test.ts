@@ -22,6 +22,12 @@ describe('normalizeSettings', () => {
     expect(s).toEqual(DEFAULT_SETTINGS);
   });
 
+  it('sortByDomain は boolean のみ受け付け、既定は true', () => {
+    expect(DEFAULT_SETTINGS.sortByDomain).toBe(true);
+    expect(normalizeSettings({ sortByDomain: false }).sortByDomain).toBe(false);
+    expect(normalizeSettings({ sortByDomain: 'no' }).sortByDomain).toBe(true);
+  });
+
   it('keepPercent は 0〜100 にクランプ', () => {
     expect(normalizeSettings({ keepPercent: 150 }).keepPercent).toBe(100);
     expect(normalizeSettings({ keepPercent: -5 }).keepPercent).toBe(0);

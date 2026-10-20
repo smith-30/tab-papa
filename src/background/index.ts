@@ -1,4 +1,4 @@
-import { sweepWindow } from '../chrome/tabs';
+import { sortWindowByDomain, sweepWindow } from '../chrome/tabs';
 import { loadSettings } from '../storage/settings';
 
 // MV3 の Service Worker は破棄されるため、待機は setTimeout ではなく chrome.alarms を使う
@@ -10,12 +10,16 @@ async function scheduleSweep(): Promise<void> {
   await chrome.alarms.create(SWEEP_ALARM, { delayInMinutes: settings.delaySeconds / 60 });
 }
 
+async function isChromeFocused(): Promise<boolean> {
+  const last = await chrome.windows.getLastFocused().catch(() => null);
+  return last?.focused ?? false;
+}
+
 async function runSweep(): Promise<void> {
   const settings = await loadSettings();
   if (!settings.enabled) return;
   // 予約後に Chrome へフォーカスが戻っていたら、ブラウジング中なので実行しない
-  const last = await chrome.windows.getLastFocused().catch(() => null);
-  if (last?.focused) {
+  if (await isChromeFocused()) {
     console.info('[tab-papa] sweep skipped: Chrome is focused');
     return;
   }
@@ -26,6 +30,13 @@ async function runSweep(): Promise<void> {
     '[tab-papa] sweep',
     results.filter((r) => r !== undefined),
   );
+
+  if (!settings.sortByDomain) return;
+  // スイープ中に Chrome へ戻っていたら、並べ替えで画面を動かさない
+  if (await isChromeFocused()) return;
+  // 並べ替えはタブを閉じた後の最新の index で行う。ウィンドウごとに独立
+  const moved = await Promise.all(windows.map((win) => sortWindowByDomain(win)));
+  console.info('[tab-papa] sort moved', moved);
 }
 
 chrome.windows.onFocusChanged.addListener((windowId) => {
