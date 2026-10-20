@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import '@testing-library/jest-dom/vitest';
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/preact';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/preact';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { DEFAULT_SETTINGS } from '../src/config';
@@ -77,8 +77,56 @@ describe('<App />', () => {
       installChromeMock({ settings: { ...settings, keepPercent: 10 } }, { window, tabs });
       render(<App />);
       expect(await screen.findByText('閉じる予定 (2)')).toBeInTheDocument();
-      const items = screen.getAllByRole('listitem').map((li) => li.textContent);
-      expect(items).toEqual(['タブ1', 'タブ2']);
+      const closing = within(screen.getByRole('list', { name: '閉じる予定のタブ' }));
+      expect(closing.getAllByRole('listitem').map((li) => li.textContent)).toEqual([
+        'タブ1',
+        'タブ2',
+      ]);
+    });
+
+    it('残るタブを現在の並びで表示し、その下に目標の罫線を引く', async () => {
+      installChromeMock({ settings: { ...settings, keepPercent: 10 } }, { window, tabs });
+      render(<App />);
+      const kept = await screen.findByRole('list', { name: '残るタブ' });
+      expect(
+        within(kept)
+          .getAllByRole('listitem')
+          .map((li) => li.textContent),
+      ).toEqual(['タブ3', 'タブ4', 'タブ5']);
+      const line = screen.getByRole('separator');
+      expect(line).toHaveTextContent('目標 3 行');
+      // 罫線は「残る」一覧の後ろ、「閉じる予定」一覧の前
+      const closing = screen.getByRole('list', { name: '閉じる予定のタブ' });
+      expect(kept.compareDocumentPosition(line) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+      expect(line.compareDocumentPosition(closing) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    });
+
+    it('スライダーを動かすと罫線の上下でタブが入れ替わる', async () => {
+      installChromeMock({ settings: { ...settings, keepPercent: 100 } }, { window, tabs });
+      render(<App />);
+      const kept = await screen.findByRole('list', { name: '残るタブ' });
+      expect(within(kept).getAllByRole('listitem')).toHaveLength(5);
+      fireEvent.input(screen.getByLabelText('縦タブの使用率'), { target: { value: '10' } });
+      await waitFor(() => expect(within(kept).getAllByRole('listitem')).toHaveLength(3));
+    });
+
+    it('グループはヘッダー行(名前つき)として表示する', async () => {
+      const grouped = [
+        mockTab(1, { groupId: 7 }),
+        mockTab(2, { groupId: 7 }),
+        mockTab(3, { active: true }),
+      ];
+      installChromeMock(
+        { settings: { ...settings, keepPercent: 100 } },
+        { window, tabs: grouped, groups: [{ id: 7, collapsed: false, title: '調査' }] },
+      );
+      render(<App />);
+      const kept = await screen.findByRole('list', { name: '残るタブ' });
+      expect(
+        within(kept)
+          .getAllByRole('listitem')
+          .map((li) => li.textContent),
+      ).toEqual(['調査', 'タブ1', 'タブ2', 'タブ3']);
     });
 
     it('目標以内なら「閉じるタブはありません」と表示する', async () => {
@@ -101,7 +149,8 @@ describe('<App />', () => {
       render(<App />);
       // 目標 3 行 → 17 件が対象
       expect(await screen.findByText('閉じる予定 (17)')).toBeInTheDocument();
-      expect(screen.getAllByRole('listitem')).toHaveLength(8);
+      const closing = within(screen.getByRole('list', { name: '閉じる予定のタブ' }));
+      expect(closing.getAllByRole('listitem')).toHaveLength(8);
       expect(screen.getByText('ほか 9 件')).toBeInTheDocument();
     });
 

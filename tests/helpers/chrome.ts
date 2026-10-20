@@ -6,7 +6,7 @@ type ChromeMockOptions = {
   /** getLastFocused が返す通常ウィンドウ。省略時はウィンドウ情報なし(プレビュー非表示) */
   window?: { id: number; height: number };
   tabs?: MockTab[];
-  groups?: { id: number; collapsed: boolean }[];
+  groups?: { id: number; collapsed: boolean; title?: string }[];
 };
 
 /** chrome.* を最小限モックする。storage はインメモリ */
@@ -34,7 +34,7 @@ export function installChromeMock(
       query: vi.fn<() => Promise<MockTab[]>>(async () => opts.tabs ?? []),
     },
     tabGroups: {
-      query: vi.fn<() => Promise<{ id: number; collapsed: boolean }[]>>(
+      query: vi.fn<() => Promise<{ id: number; collapsed: boolean; title?: string }[]>>(
         async () => opts.groups ?? [],
       ),
     },

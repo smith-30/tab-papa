@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'preact/hooks';
 import { type WindowSnapshot, loadWindowSnapshot } from '../chrome/tabs';
 import { MIN_ALARM_SECONDS } from '../config';
 import { planSweep } from '../lib/plan';
+import { buildKeptRows } from '../lib/rows';
 import { type Settings, loadSettings, saveSettings } from '../storage/settings';
 
 const MAX_DELAY_SECONDS = 600;
@@ -59,9 +60,13 @@ type PreviewProps = {
   settings: Settings;
 };
 
-/** 今の設定でスイープした場合に閉じられるタブの一覧(実際のスイープと同じ計算) */
+/** 今の設定でスイープした場合の縦タブ一覧。罫線より上が残り、下が閉じられる(実際のスイープと同じ計算) */
 function Preview({ snapshot, settings }: PreviewProps) {
   const plan = useMemo(() => planSweep({ ...snapshot, ...settings }), [snapshot, settings]);
+  const kept = useMemo(
+    () => buildKeptRows({ ...snapshot, closeIds: plan.closeIds }),
+    [snapshot, plan.closeIds],
+  );
   const shown = plan.closeIds.slice(0, PREVIEW_LIMIT);
   const rest = plan.closeIds.length - shown.length;
   return (
@@ -69,14 +74,33 @@ function Preview({ snapshot, settings }: PreviewProps) {
       <p class="text-xs text-zinc-400">
         {`表示できる行数 ${plan.capacity} / 使用 ${plan.used} / 目標 ${plan.target}`}
       </p>
+      <ul aria-label="残るタブ" class="mt-3 max-h-56 space-y-1 overflow-y-auto text-sm">
+        {kept.map((row) =>
+          row.kind === 'group' ? (
+            <li key={`g${row.id}`} class="truncate font-medium text-indigo-300">
+              {row.title || 'グループ'}
+            </li>
+          ) : (
+            <li key={row.id} class="truncate rounded bg-zinc-800 px-2 py-1 text-zinc-200">
+              {row.title}
+            </li>
+          ),
+        )}
+      </ul>
+      <div
+        role="separator"
+        class="my-2 flex items-center gap-2 text-xs text-cyan-400 before:h-px before:flex-1 before:border-t before:border-dashed before:border-cyan-400"
+      >
+        {`目標 ${plan.target} 行`}
+      </div>
       {plan.closeIds.length === 0 ? (
-        <p class="mt-2 text-sm">閉じるタブはありません</p>
+        <p class="text-sm">閉じるタブはありません</p>
       ) : (
         <>
-          <h2 class="mt-2 text-sm font-medium">{`閉じる予定 (${plan.closeIds.length})`}</h2>
-          <ul class="mt-2 space-y-1 text-sm text-zinc-300">
+          <h2 class="text-sm font-medium">{`閉じる予定 (${plan.closeIds.length})`}</h2>
+          <ul aria-label="閉じる予定のタブ" class="mt-2 space-y-1 text-sm text-zinc-500">
             {shown.map((id) => (
-              <li key={id} class="truncate">
+              <li key={id} class="truncate line-through">
                 {snapshot.titles[id]}
               </li>
             ))}
