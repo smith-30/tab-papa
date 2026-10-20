@@ -26,8 +26,8 @@ src/
     tabs.ts            chrome.tabs / tabGroups / windows との変換・スイープと並べ替えの実行
   background/
     index.ts           Service Worker。フォーカス検知と alarms の配線
-  popup/               ポップアップ UI(現状は最小の骨組みのみ)
-tests/                 vitest。lib は node 環境、コンポーネントは jsdom
+  popup/               ポップアップ UI(待ち時間・使用率の設定)
+tests/                 vitest。lib は node 環境、コンポーネントは jsdom(chrome.storage は tests/helpers/chrome.ts でモック)
 docs/                  仕様・構成
 store/                 Chrome Web Store 提出素材(掲載文・画像テンプレート・生成画像)。詳細は store/README.md
 public/icons/          拡張アイコン(store/icon.svg から生成)

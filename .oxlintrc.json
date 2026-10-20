@@ -24,7 +24,7 @@
     "unicorn/throw-new-error": "error",
 
     // CSS side-effect import
-    "import/no-unassigned-import": ["warn", { "allow": ["**/*.css"] }]
+    "import/no-unassigned-import": ["warn", { "allow": ["**/*.css", "@testing-library/jest-dom/vitest"] }]
   },
   "env": {
     "builtin": true,

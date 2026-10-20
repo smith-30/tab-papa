@@ -69,12 +69,23 @@ Chrome を触っていないときだけ実行し、ブラウジング中は実�
 
 保存先は `chrome.storage.local` の `settings` キー。不正値は `normalizeSettings` で補正する。
 
+## ポップアップ(設定画面)
+
+拡張アイコンのクリックで開く。変更は即座に `chrome.storage.local` へ保存する(保存ボタンなし)。
+
+| 項目 | UI | 範囲 | 対応する設定 |
+|---|---|---|---|
+| 整理するまでの待ち時間 | スライダー(10 秒刻み) | 30〜600 秒(デバッグビルドは 10 秒から) | `delaySeconds` |
+| 縦タブの使用率 | スライダー(5% 刻み) | 10〜100% | `keepPercent` |
+
+他の設定(`enabled`、`sortByDomain`、`rowHeight`、`fixedHeight`)は現状 UI が無く、保存済みの値を保ったまま書き戻す。
+
 ## 権限
 
 `tabs`, `tabGroups`, `storage`, `alarms`
 
 ## 未実装・未確認
 
-- ポップアップの設定画面(現状は `src/config.ts` を直接編集)。
+- ポップアップに、有効/無効・ドメイン整列のオン/オフ・行の高さ・固定分の UI(現状は待ち時間と使用率のみ)。
 - 閉じたタブの履歴と復元。
 - 実機での確認: `WINDOW_ID_NONE` の挙動(macOS)、`windows.height` と縦タブ一覧の高さのずれ、行の高さの実寸、ピン留めタブの行数の扱い。
