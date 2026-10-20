@@ -67,12 +67,6 @@ describe('<App />', () => {
     const window = { id: 1, height: 1000 };
     const tabs = [1, 2, 3, 4, 5].map((id) => mockTab(id, id === 5 ? { active: true } : {}));
 
-    it('容量・使用行数・目標行数を表示する', async () => {
-      installChromeMock({ settings: { ...settings, keepPercent: 10 } }, { window, tabs });
-      render(<App />);
-      expect(await screen.findByText('表示できる行数 30 / 使用 5 / 目標 3')).toBeInTheDocument();
-    });
-
     it('閉じる予定のタブをタイトルで古い順に表示する(アクティブは対象外)', async () => {
       installChromeMock({ settings: { ...settings, keepPercent: 10 } }, { window, tabs });
       render(<App />);

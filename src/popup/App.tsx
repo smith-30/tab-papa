@@ -66,14 +66,11 @@ function Preview({ snapshot, settings }: PreviewProps) {
   const rest = plan.closeIds.length - shown.length;
   return (
     <section class="rounded-xl bg-zinc-900 p-4">
-      <p class="text-xs text-zinc-400">
-        {`表示できる行数 ${plan.capacity} / 使用 ${plan.used} / 目標 ${plan.target}`}
-      </p>
       {plan.closeIds.length === 0 ? (
-        <p class="mt-2 text-sm">閉じるタブはありません</p>
+        <p class="text-sm">閉じるタブはありません</p>
       ) : (
         <>
-          <h2 class="mt-2 text-sm font-medium">{`閉じる予定 (${plan.closeIds.length})`}</h2>
+          <h2 class="text-sm font-medium">{`閉じる予定 (${plan.closeIds.length})`}</h2>
           <ul class="mt-2 space-y-1 text-sm text-zinc-300">
             {shown.map((id) => (
               <li key={id} class="truncate">
