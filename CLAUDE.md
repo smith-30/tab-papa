@@ -16,6 +16,7 @@ Chrome の縦タブモードで使う前提の、タブ数をスマートに管�
 ```bash
 pnpm dev           # 開発ビルド(vite + crxjs)
 pnpm build         # dist/ へビルド
+pnpm build:debug   # 動作確認用ビルド(スイープ待ち 10 秒)。配布には使わない
 pnpm test          # 単体テスト(vitest)
 pnpm test:watch    # ウォッチモード
 pnpm typecheck     # tsc --noEmit

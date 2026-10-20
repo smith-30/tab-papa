@@ -15,9 +15,17 @@ async function runSweep(): Promise<void> {
   if (!settings.enabled) return;
   // 予約後に Chrome へフォーカスが戻っていたら、ブラウジング中なので実行しない
   const last = await chrome.windows.getLastFocused().catch(() => null);
-  if (last?.focused) return;
+  if (last?.focused) {
+    console.info('[tab-papa] sweep skipped: Chrome is focused');
+    return;
+  }
   const windows = await chrome.windows.getAll({ windowTypes: ['normal'] });
-  await Promise.all(windows.map((win) => sweepWindow(win, settings)));
+  const results = await Promise.all(windows.map((win) => sweepWindow(win, settings)));
+  // 動作確認用: Service Worker のコンソールで判定の内訳を見られる
+  console.info(
+    '[tab-papa] sweep',
+    results.filter((r) => r !== undefined),
+  );
 }
 
 chrome.windows.onFocusChanged.addListener((windowId) => {

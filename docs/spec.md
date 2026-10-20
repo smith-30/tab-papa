@@ -52,6 +52,8 @@ Chrome を触っていないときだけ実行し、ブラウジング中は実�
 | `fixedHeight` | 120 | 0 以上 | 縦タブ一覧に使えない固定の高さ(px)。暫定値 |
 | `delaySeconds` | 60 | 30 以上 | フォーカスが外れてから実行するまでの秒数(alarms の最短が 30 秒) |
 
+`pnpm build:debug`(`--mode development`)でビルドすると、`delaySeconds` の初期値と下限が 10 秒になる(動作確認用。配布用ビルドは常に 60 秒・30 秒)。
+
 保存先は `chrome.storage.local` の `settings` キー。不正値は `normalizeSettings` で補正する。
 
 ## 権限
