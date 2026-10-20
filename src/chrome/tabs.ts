@@ -19,11 +19,7 @@ export type WindowSnapshot = {
   windowId: number;
   windowHeight: number;
   tabs: TabInfo[];
-  /** タブ id を現在の並び(index 昇順)にしたもの */
-  order: number[];
   groups: GroupInfo[];
-  /** グループ id → グループ名 */
-  groupTitles: Record<number, string>;
   /** タブ id → タイトル(ポップアップのプレビュー表示用。保存・送信はしない) */
   titles: Record<number, string>;
 };
@@ -46,11 +42,7 @@ export async function loadWindowSnapshot(
     windowId: win.id,
     windowHeight: win.height,
     tabs: tabs.map(toTabInfo).filter((t): t is TabInfo => t !== undefined),
-    order: tabs
-      .toSorted((a, b) => a.index - b.index)
-      .flatMap((t) => (t.id === undefined ? [] : [t.id])),
     groups: groups.map((g) => ({ id: g.id, collapsed: g.collapsed })),
-    groupTitles: Object.fromEntries(groups.map((g) => [g.id, g.title ?? ''])),
     titles,
   };
 }

@@ -19,7 +19,6 @@ src/
   lib/               Chrome API に依存しない純粋関数
     capacity.ts        容量の推定・目標行数
     sweep.ts           使用行数の計算・スイープ対象の選定
-    rows.ts            スイープ後に残る縦タブ一覧の行(ヘッダー行を含む)。ポップアップのプレビュー用
     plan.ts            1 ウィンドウのスイープ計画(容量・使用・目標・対象)。実行とプレビューで共有
     domainSort.ts      ドメイン順の並べ替え計画(move の列)
   storage/
