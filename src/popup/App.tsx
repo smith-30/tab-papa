@@ -1,12 +1,15 @@
-import { useCallback, useEffect, useState } from 'preact/hooks';
+import { useCallback, useEffect, useMemo, useState } from 'preact/hooks';
 
+import { type WindowSnapshot, loadWindowSnapshot } from '../chrome/tabs';
 import { MIN_ALARM_SECONDS } from '../config';
+import { planSweep } from '../lib/plan';
 import { type Settings, loadSettings, saveSettings } from '../storage/settings';
 
 const MAX_DELAY_SECONDS = 600;
 const DELAY_STEP = 10;
 const MIN_KEEP_PERCENT = 10;
 const KEEP_STEP = 5;
+const PREVIEW_LIMIT = 8;
 
 type NumericSetting = 'delaySeconds' | 'keepPercent';
 
@@ -51,11 +54,52 @@ function Slider({ field, label, hint, value, display, min, max, step, onChange }
   );
 }
 
+type PreviewProps = {
+  snapshot: WindowSnapshot;
+  settings: Settings;
+};
+
+/** 今の設定でスイープした場合に閉じられるタブの一覧(実際のスイープと同じ計算) */
+function Preview({ snapshot, settings }: PreviewProps) {
+  const plan = useMemo(() => planSweep({ ...snapshot, ...settings }), [snapshot, settings]);
+  const shown = plan.closeIds.slice(0, PREVIEW_LIMIT);
+  const rest = plan.closeIds.length - shown.length;
+  return (
+    <section class="rounded-xl bg-zinc-900 p-4">
+      <p class="text-xs text-zinc-400">
+        {`表示できる行数 ${plan.capacity} / 使用 ${plan.used} / 目標 ${plan.target}`}
+      </p>
+      {plan.closeIds.length === 0 ? (
+        <p class="mt-2 text-sm">閉じるタブはありません</p>
+      ) : (
+        <>
+          <h2 class="mt-2 text-sm font-medium">{`閉じる予定 (${plan.closeIds.length})`}</h2>
+          <ul class="mt-2 space-y-1 text-sm text-zinc-300">
+            {shown.map((id) => (
+              <li key={id} class="truncate">
+                {snapshot.titles[id]}
+              </li>
+            ))}
+          </ul>
+          {rest > 0 && <p class="mt-1 text-xs text-zinc-400">{`ほか ${rest} 件`}</p>}
+        </>
+      )}
+    </section>
+  );
+}
+
 export function App() {
   const [settings, setSettings] = useState<Settings | null>(null);
+  const [snapshot, setSnapshot] = useState<WindowSnapshot | null>(null);
 
   useEffect(() => {
     void loadSettings().then(setSettings);
+    // プレビューは補助機能なので、ウィンドウを取れなくても設定画面は使えるようにする
+    void chrome.windows
+      .getLastFocused({ windowTypes: ['normal'] })
+      .then(loadWindowSnapshot)
+      .then((snap) => setSnapshot(snap ?? null))
+      .catch(() => setSnapshot(null));
   }, []);
 
   // 変更は即保存する。保存値は他の項目を含む設定全体
@@ -96,6 +140,7 @@ export function App() {
         step={KEEP_STEP}
         onChange={update}
       />
+      {snapshot && <Preview snapshot={snapshot} settings={settings} />}
     </main>
   );
 }

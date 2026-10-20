@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { DEFAULT_SETTINGS } from '../src/config';
 import { App } from '../src/popup/App';
-import { installChromeMock } from './helpers/chrome';
+import { installChromeMock, mockTab } from './helpers/chrome';
 
 afterEach(() => {
   cleanup();
@@ -59,5 +59,57 @@ describe('<App />', () => {
       }),
     );
     expect(screen.getByText('55%')).toBeInTheDocument();
+  });
+
+  describe('閉じる予定のプレビュー', () => {
+    // 容量 = (1000 − 100) ÷ 30 = 30 行
+    const settings = { fixedHeight: 100, rowHeight: 30 };
+    const window = { id: 1, height: 1000 };
+    const tabs = [1, 2, 3, 4, 5].map((id) => mockTab(id, id === 5 ? { active: true } : {}));
+
+    it('容量・使用行数・目標行数を表示する', async () => {
+      installChromeMock({ settings: { ...settings, keepPercent: 10 } }, { window, tabs });
+      render(<App />);
+      expect(await screen.findByText('表示できる行数 30 / 使用 5 / 目標 3')).toBeInTheDocument();
+    });
+
+    it('閉じる予定のタブをタイトルで古い順に表示する(アクティブは対象外)', async () => {
+      installChromeMock({ settings: { ...settings, keepPercent: 10 } }, { window, tabs });
+      render(<App />);
+      expect(await screen.findByText('閉じる予定 (2)')).toBeInTheDocument();
+      const items = screen.getAllByRole('listitem').map((li) => li.textContent);
+      expect(items).toEqual(['タブ1', 'タブ2']);
+    });
+
+    it('目標以内なら「閉じるタブはありません」と表示する', async () => {
+      installChromeMock({ settings: { ...settings, keepPercent: 100 } }, { window, tabs });
+      render(<App />);
+      expect(await screen.findByText('閉じるタブはありません')).toBeInTheDocument();
+    });
+
+    it('スライダーを動かすと一覧が即座に更新される', async () => {
+      installChromeMock({ settings: { ...settings, keepPercent: 100 } }, { window, tabs });
+      render(<App />);
+      await screen.findByText('閉じるタブはありません');
+      fireEvent.input(screen.getByLabelText('縦タブの使用率'), { target: { value: '10' } });
+      expect(await screen.findByText('閉じる予定 (2)')).toBeInTheDocument();
+    });
+
+    it('多い場合は先頭の 8 件だけ表示し、残りは件数で示す', async () => {
+      const many = Array.from({ length: 20 }, (_, i) => mockTab(i + 1));
+      installChromeMock({ settings: { ...settings, keepPercent: 10 } }, { window, tabs: many });
+      render(<App />);
+      // 目標 3 行 → 17 件が対象
+      expect(await screen.findByText('閉じる予定 (17)')).toBeInTheDocument();
+      expect(screen.getAllByRole('listitem')).toHaveLength(8);
+      expect(screen.getByText('ほか 9 件')).toBeInTheDocument();
+    });
+
+    it('ウィンドウ情報が取れなくても設定は操作できる', async () => {
+      installChromeMock();
+      render(<App />);
+      expect(await screen.findByLabelText('縦タブの使用率')).toBeInTheDocument();
+      expect(screen.queryByText(/閉じる予定/)).not.toBeInTheDocument();
+    });
   });
 });

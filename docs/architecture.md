@@ -19,11 +19,12 @@ src/
   lib/               Chrome API に依存しない純粋関数
     capacity.ts        容量の推定・目標行数
     sweep.ts           使用行数の計算・スイープ対象の選定
+    plan.ts            1 ウィンドウのスイープ計画(容量・使用・目標・対象)。実行とプレビューで共有
     domainSort.ts      ドメイン順の並べ替え計画(move の列)
   storage/
     settings.ts        設定の正規化(純粋)と chrome.storage の読み書き
   chrome/
-    tabs.ts            chrome.tabs / tabGroups / windows との変換・スイープと並べ替えの実行
+    tabs.ts            chrome.tabs / tabGroups / windows との変換・スナップショット取得・スイープと並べ替えの実行
   background/
     index.ts           Service Worker。フォーカス検知と alarms の配線
   popup/               ポップアップ UI(待ち時間・使用率の設定)
