@@ -16,7 +16,8 @@
     "skipLibCheck": true,
     "types": [
       "chrome",
-      "vite/client"
+      "vite/client",
+      "node"
     ],
     "jsx": "react-jsx",
     "jsxImportSource": "preact"
