@@ -36,6 +36,16 @@ prek を使用。コミット時に oxfmt → oxlint → zizmor(workflow 変更�
 format:check → lint → typecheck → secretlint → test → build。action は全て commit SHA で固定し、Dependabot で更新する。
 Scorecard は `scorecard.yml` で毎週実行。
 
+## リリース
+
+`package.json` の `version` が単一の真実(manifest は参照する)。
+
+```bash
+make release-major   # 0.0.0 → 1.0.0(初回)。minor / patch も同様
+```
+
+`pnpm version` → `chore: release vX.Y.Z` のコミットとタグ → push までを行い、直前のタグからの変更一覧(ストアのリリースノート用)を表示する。`v*` タグの push で `.github/workflows/release.yml` が本番ビルドの ZIP を作り、GitHub Release に添付する。Chrome Web Store への提出は手動(ZIP をダッシュボードへアップロード)。
+
 ## コード品質ルール
 
 - フォーマット(`.oxfmtrc.json`): `singleQuote`、`trailingComma: "all"`、`printWidth: 100`、`sortImports`

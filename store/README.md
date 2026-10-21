@@ -24,4 +24,5 @@ rsvg-convert -w 128 -h 128 store/icon.svg -o public/icons/icon-128.png   # ア�
 - [x] ポップアップの実画面スクリーンショット(`04_settings`)。`01`〜`03` はイメージ図で、`01` の縦タブ一覧のイラストは Chrome 本体の画面であり拡張の UI ではない
 - [ ] 行の高さ・固定分の初期値を実機で確定する
 - [ ] 英語版の画像が必要なら `assets/` を複製して差し替える(現状は日本語のみ)
+- [ ] `make release-major` で 1.0.0 を切り、GitHub Release の ZIP をダッシュボードへアップロードする(`pnpm build` 済みの本番ビルドであること。`build:debug` の `dist/` は使わない)
 - [ ] リポジトリ公開後、掲載文の「GitHub で公開」にリンクを足す

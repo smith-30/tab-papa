@@ -35,7 +35,8 @@ tests/                 vitest。lib は node 環境、コンポーネントは j
 docs/                  仕様・構成
 store/                 Chrome Web Store 提出素材(掲載文・画像テンプレート・生成画像)。詳細は store/README.md
 public/icons/          拡張アイコン(store/icon.svg から生成)
-.github/workflows/     ci.yml(format → lint → typecheck → secretlint → test → build)、scorecard.yml
+.github/workflows/     ci.yml(format → lint → typecheck → secretlint → test → build)、release.yml(v* タグで ZIP を GitHub Release へ)、scorecard.yml
+Makefile               release-patch / minor / major、changelog
 ```
 
 ## 設計の原則
