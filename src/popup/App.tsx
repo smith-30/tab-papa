@@ -4,6 +4,7 @@ import { type WindowSnapshot, loadWindowSnapshot } from '../chrome/tabs';
 import { MIN_ALARM_SECONDS } from '../config';
 import { planSweep } from '../lib/plan';
 import { type Settings, loadSettings, saveSettings } from '../storage/settings';
+import { t } from './i18n';
 
 const MAX_DELAY_SECONDS = 600;
 const DELAY_STEP = 10;
@@ -26,7 +27,7 @@ type SliderProps = {
 };
 
 function Slider({ field, label, hint, value, display, min, max, step, onChange }: SliderProps) {
-  const id = `slider-${label}`;
+  const id = `slider-${field}`;
   const handleInput = useCallback(
     (e: Event) => onChange(field, Number((e.currentTarget as HTMLInputElement).value)),
     [field, onChange],
@@ -90,10 +91,10 @@ function Preview({ snapshot, settings }: PreviewProps) {
   return (
     <section class="rounded-xl bg-zinc-900 p-4">
       {plan.closeIds.length === 0 ? (
-        <p class="text-sm">閉じるタブはありません</p>
+        <p class="text-sm">{t('previewNone')}</p>
       ) : (
         <>
-          <h2 class="text-sm font-medium">{`閉じる予定 (${plan.closeIds.length})`}</h2>
+          <h2 class="text-sm font-medium">{t('previewTitle', [String(plan.closeIds.length)])}</h2>
           <ul class="mt-2 space-y-1 text-sm text-zinc-300">
             {shown.map((id) => (
               <li key={id} class="truncate">
@@ -101,7 +102,7 @@ function Preview({ snapshot, settings }: PreviewProps) {
               </li>
             ))}
           </ul>
-          {rest > 0 && <p class="mt-1 text-xs text-zinc-400">{`ほか ${rest} 件`}</p>}
+          {rest > 0 && <p class="mt-1 text-xs text-zinc-400">{t('previewMore', [String(rest)])}</p>}
         </>
       )}
     </section>
@@ -146,14 +147,14 @@ export function App() {
     <main class="w-80 space-y-3 p-4">
       <header class="flex items-center justify-between">
         <h1 class="text-base font-semibold">tab-papa</h1>
-        <Switch label="自動整理" checked={settings.enabled} onToggle={toggleEnabled} />
+        <Switch label={t('toggleLabel')} checked={settings.enabled} onToggle={toggleEnabled} />
       </header>
       <Slider
         field="delaySeconds"
-        label="整理するまでの待ち時間"
-        hint="Chrome から離れて、この時間が経つと整理します。戻ると中断します。"
+        label={t('delayLabel')}
+        hint={t('delayHint')}
         value={settings.delaySeconds}
-        display={`${settings.delaySeconds} 秒`}
+        display={t('delayValue', [String(settings.delaySeconds)])}
         min={MIN_ALARM_SECONDS}
         max={MAX_DELAY_SECONDS}
         step={DELAY_STEP}
@@ -161,10 +162,10 @@ export function App() {
       />
       <Slider
         field="keepPercent"
-        label="縦タブの使用率"
-        hint="縦タブ一覧に表示できる行数のうち、この割合まで減らします。"
+        label={t('keepLabel')}
+        hint={t('keepHint')}
         value={settings.keepPercent}
-        display={`${settings.keepPercent}%`}
+        display={t('keepValue', [String(settings.keepPercent)])}
         min={MIN_KEEP_PERCENT}
         max={100}
         step={KEEP_STEP}
@@ -173,7 +174,7 @@ export function App() {
       {settings.enabled ? (
         snapshot && <Preview snapshot={snapshot} settings={settings} />
       ) : (
-        <p class="rounded-xl bg-zinc-900 p-4 text-sm text-zinc-400">自動整理はオフです</p>
+        <p class="rounded-xl bg-zinc-900 p-4 text-sm text-zinc-400">{t('tidyOff')}</p>
       )}
     </main>
   );

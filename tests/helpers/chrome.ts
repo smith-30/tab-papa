@@ -7,6 +7,8 @@ type ChromeMockOptions = {
   window?: { id: number; height: number };
   tabs?: MockTab[];
   groups?: { id: number; collapsed: boolean }[];
+  /** chrome.i18n.getMessage の戻り値。省略時は空文字(日本語にフォールバック) */
+  i18nMessage?: (key: string, subs?: string[]) => string;
 };
 
 /** chrome.* を最小限モックする。storage はインメモリ */
@@ -26,6 +28,9 @@ export function installChromeMock(
           Object.assign(store, obj);
         }),
       },
+    },
+    i18n: {
+      getMessage: vi.fn<(key: string, subs?: string[]) => string>(opts.i18nMessage ?? (() => '')),
     },
     windows: {
       getLastFocused: vi.fn<() => Promise<typeof win>>(async () => win),

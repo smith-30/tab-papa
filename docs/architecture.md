@@ -16,10 +16,12 @@ manifest.config.ts   MV3 manifest 定義(package.json の version を参照)
 vite.config.ts       Vite + crxjs + Preact + Tailwind
 src/
   config.ts          設定の初期値・定数(閾値はここに集約)
+  locales.ts         UI 文言の単一ソース(ja / en)。_locales の生成元
   lib/               Chrome API に依存しない純粋関数
     capacity.ts        容量の推定・目標行数
     sweep.ts           使用行数の計算・スイープ対象の選定
     duplicates.ts      重複タブ(同一 URL)の選定
+    localeMessages.ts  文言を Chrome の messages.json 形式へ変換
     plan.ts            1 ウィンドウのスイープ計画(容量・使用・目標・対象)。実行とプレビューで共有
     domainSort.ts      ドメイン順の並べ替え計画(move の列)
   storage/
@@ -28,7 +30,7 @@ src/
     tabs.ts            chrome.tabs / tabGroups / windows との変換・スナップショット取得・スイープと並べ替えの実行
   background/
     index.ts           Service Worker。フォーカス検知と alarms の配線
-  popup/               ポップアップ UI(待ち時間・使用率の設定)
+  popup/               ポップアップ UI(自動整理のオン/オフ・待ち時間・使用率)。i18n.ts は t()
 tests/                 vitest。lib は node 環境、コンポーネントは jsdom(chrome.storage は tests/helpers/chrome.ts でモック)
 docs/                  仕様・構成
 store/                 Chrome Web Store 提出素材(掲載文・画像テンプレート・生成画像)。詳細は store/README.md

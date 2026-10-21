@@ -4,8 +4,13 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/pr
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { DEFAULT_SETTINGS } from '../src/config';
+import { MESSAGES, type MessageKey } from '../src/locales';
 import { App } from '../src/popup/App';
 import { installChromeMock, mockTab } from './helpers/chrome';
+
+// 実機の chrome.i18n(英語ロケール)相当
+const en = (key: string, subs?: string[]) =>
+  MESSAGES.en[key as MessageKey].replaceAll('$1', subs?.[0] ?? '');
 
 afterEach(() => {
   cleanup();
@@ -144,6 +149,21 @@ describe('<App />', () => {
       render(<App />);
       expect(await screen.findByText('自動整理はオフです')).toBeInTheDocument();
       expect(screen.queryByText(/閉じる予定/)).not.toBeInTheDocument();
+    });
+  });
+
+  describe('英語', () => {
+    it('chrome.i18n が英語を返せば英語で表示する', async () => {
+      const tabs = [1, 2, 3, 4, 5].map((id) => mockTab(id, id === 5 ? { active: true } : {}));
+      installChromeMock(
+        { settings: { keepPercent: 10, fixedHeight: 100, rowHeight: 30, delaySeconds: 90 } },
+        { window: { id: 1, height: 1000 }, tabs, i18nMessage: en },
+      );
+      render(<App />);
+      expect(await screen.findByRole('switch', { name: 'Auto tidy' })).toBeInTheDocument();
+      expect(screen.getByLabelText('Wait before tidying')).toHaveValue('90');
+      expect(screen.getByText('90 sec')).toBeInTheDocument();
+      expect(await screen.findByText('Will close (2)')).toBeInTheDocument();
     });
   });
 });

@@ -6,7 +6,8 @@ const manifest: ManifestV3Export = {
   manifest_version: 3,
   name: 'tab-papa',
   version: pkg.version,
-  description: 'Smart tab-count management for Chrome vertical tabs',
+  description: '__MSG_appDesc__',
+  default_locale: 'ja',
   icons: {
     '16': 'icons/icon-16.png',
     '32': 'icons/icon-32.png',

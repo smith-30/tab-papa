@@ -48,6 +48,10 @@ Scorecard は `scorecard.yml` で毎週実行。
 
 副作用は `src/storage/` と `src/chrome/` に隔離し、`src/background/index.ts` で配線する。
 
+## 多言語
+
+UI 文言は `src/locales.ts`(ja / en)が単一ソース。ポップアップでは `t(key, [値])` を使い、日本語リテラルを直接書かない。文言を足したら `ja` と `en` の両方に足す(キー・`$1` の有無はテストで検証)。`public/_locales/` はビルド時に生成されるので編集しない。
+
 ## 閾値・初期値
 
 `src/config.ts` に集約する。ここ以外には書かない。`rowHeight` / `fixedHeight` は実機未確認の暫定値。
