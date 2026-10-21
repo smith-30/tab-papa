@@ -106,4 +106,44 @@ describe('<App />', () => {
       expect(screen.queryByText(/閉じる予定/)).not.toBeInTheDocument();
     });
   });
+
+  describe('自動整理のオン/オフ', () => {
+    it('既定ではオンで表示する', async () => {
+      installChromeMock();
+      render(<App />);
+      const toggle = await screen.findByRole('switch', { name: '自動整理' });
+      expect(toggle).toHaveAttribute('aria-checked', 'true');
+    });
+
+    it('保存済みのオフを反映する', async () => {
+      installChromeMock({ settings: { enabled: false } });
+      render(<App />);
+      const toggle = await screen.findByRole('switch', { name: '自動整理' });
+      expect(toggle).toHaveAttribute('aria-checked', 'false');
+    });
+
+    it('クリックで切り替わり、他の設定を保ったまま storage に保存される', async () => {
+      const { store } = installChromeMock({ settings: { keepPercent: 55, delaySeconds: 90 } });
+      render(<App />);
+      fireEvent.click(await screen.findByRole('switch', { name: '自動整理' }));
+      await waitFor(() =>
+        expect(store.settings).toMatchObject({ enabled: false, keepPercent: 55, delaySeconds: 90 }),
+      );
+      expect(screen.getByRole('switch', { name: '自動整理' })).toHaveAttribute(
+        'aria-checked',
+        'false',
+      );
+    });
+
+    it('オフの間は「閉じる予定」を出さず、オフであることを示す', async () => {
+      const tabs = [1, 2, 3, 4, 5].map((id) => mockTab(id));
+      installChromeMock(
+        { settings: { enabled: false, keepPercent: 10, fixedHeight: 100, rowHeight: 30 } },
+        { window: { id: 1, height: 1000 }, tabs },
+      );
+      render(<App />);
+      expect(await screen.findByText('自動整理はオフです')).toBeInTheDocument();
+      expect(screen.queryByText(/閉じる予定/)).not.toBeInTheDocument();
+    });
+  });
 });

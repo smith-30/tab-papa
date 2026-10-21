@@ -54,6 +54,29 @@ function Slider({ field, label, hint, value, display, min, max, step, onChange }
   );
 }
 
+type SwitchProps = {
+  label: string;
+  checked: boolean;
+  onToggle: () => void;
+};
+
+function Switch({ label, checked, onToggle }: SwitchProps) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      aria-label={label}
+      onClick={onToggle}
+      class={`relative h-6 w-11 rounded-full transition-colors ${checked ? 'bg-indigo-400' : 'bg-zinc-700'}`}
+    >
+      <span
+        class={`absolute top-0.5 left-0.5 size-5 rounded-full bg-white transition-transform ${checked ? 'translate-x-5' : ''}`}
+      />
+    </button>
+  );
+}
+
 type PreviewProps = {
   snapshot: WindowSnapshot;
   settings: Settings;
@@ -110,11 +133,21 @@ export function App() {
     [settings],
   );
 
+  const toggleEnabled = useCallback(() => {
+    if (!settings) return;
+    const next = { ...settings, enabled: !settings.enabled };
+    setSettings(next);
+    void saveSettings(next);
+  }, [settings]);
+
   if (!settings) return null;
 
   return (
     <main class="w-80 space-y-3 p-4">
-      <h1 class="text-base font-semibold">tab-papa</h1>
+      <header class="flex items-center justify-between">
+        <h1 class="text-base font-semibold">tab-papa</h1>
+        <Switch label="自動整理" checked={settings.enabled} onToggle={toggleEnabled} />
+      </header>
       <Slider
         field="delaySeconds"
         label="整理するまでの待ち時間"
@@ -137,7 +170,11 @@ export function App() {
         step={KEEP_STEP}
         onChange={update}
       />
-      {snapshot && <Preview snapshot={snapshot} settings={settings} />}
+      {settings.enabled ? (
+        snapshot && <Preview snapshot={snapshot} settings={settings} />
+      ) : (
+        <p class="rounded-xl bg-zinc-900 p-4 text-sm text-zinc-400">自動整理はオフです</p>
+      )}
     </main>
   );
 }
