@@ -7,6 +7,7 @@ function toTabInfo(tab: chrome.tabs.Tab): TabInfo | undefined {
   if (tab.id === undefined) return undefined;
   return {
     id: tab.id,
+    url: tab.url,
     pinned: tab.pinned,
     active: tab.active,
     audible: tab.audible ?? false,
@@ -53,6 +54,7 @@ export type SweepResult = {
   capacity: number;
   used: number;
   target: number;
+  duplicates: number;
   closed: number;
 };
 
@@ -72,6 +74,7 @@ export async function sweepWindow(
     capacity: plan.capacity,
     used: plan.used,
     target: plan.target,
+    duplicates: plan.duplicateIds.length,
     closed: plan.closeIds.length,
   };
 }

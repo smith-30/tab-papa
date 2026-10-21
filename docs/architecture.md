@@ -19,6 +19,7 @@ src/
   lib/               Chrome API に依存しない純粋関数
     capacity.ts        容量の推定・目標行数
     sweep.ts           使用行数の計算・スイープ対象の選定
+    duplicates.ts      重複タブ(同一 URL)の選定
     plan.ts            1 ウィンドウのスイープ計画(容量・使用・目標・対象)。実行とプレビューで共有
     domainSort.ts      ドメイン順の並べ替え計画(move の列)
   storage/
@@ -53,7 +54,8 @@ windows.onFocusChanged(NONE)
       tabs.query + tabGroups.query    chrome/tabs.ts
       → TabInfo / GroupInfo に変換
       → estimateCapacity → targetRows lib/capacity.ts
-      → selectSweep                   lib/sweep.ts
+      → selectDuplicates(重複を先に)  lib/duplicates.ts
+      → selectSweep(残りを使用率で)   lib/sweep.ts
       → tabs.remove(ids)
   → 各通常ウィンドウ(sortByDomain 有効時):
       tabs.query で取り直し → planDomainSort   lib/domainSort.ts

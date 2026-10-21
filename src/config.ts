@@ -6,6 +6,8 @@ export const DEFAULT_SETTINGS = {
   enabled: true,
   /** スイープ後にグループ外のタブをドメイン順に並べ替える */
   sortByDomain: true,
+  /** 同じ URL のタブを、使用率に関係なく閉じる(最終アクセスが新しい 1 枚を残す) */
+  closeDuplicates: true,
   /** 見える行数に対して維持する割合(%) */
   keepPercent: 80,
   /** 縦タブ 1 行の高さ(px) */

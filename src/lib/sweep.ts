@@ -2,6 +2,8 @@ export const NO_GROUP = -1;
 
 export type TabInfo = {
   id: number;
+  /** 重複判定に使う。取得できないタブは undefined */
+  url?: string;
   pinned: boolean;
   active: boolean;
   audible: boolean;

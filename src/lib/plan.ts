@@ -1,4 +1,5 @@
 import { estimateCapacity, targetRows } from './capacity';
+import { selectDuplicates } from './duplicates';
 import { type GroupInfo, type TabInfo, selectSweep, usedRows } from './sweep';
 
 export type PlanParams = {
@@ -9,6 +10,7 @@ export type PlanParams = {
   fixedHeight: number;
   rowHeight: number;
   keepPercent: number;
+  closeDuplicates: boolean;
 };
 
 export type SweepPlan = {
@@ -18,7 +20,9 @@ export type SweepPlan = {
   used: number;
   /** 維持したい行数 */
   target: number;
-  /** 閉じる予定のタブ id(古い順) */
+  /** 重複で閉じる予定のタブ id(closeIds の先頭側) */
+  duplicateIds: number[];
+  /** 閉じる予定のタブ id。重複 → 使用率スイープ(古い順)の順 */
   closeIds: number[];
 };
 
@@ -30,13 +34,20 @@ export function planSweep({
   fixedHeight,
   rowHeight,
   keepPercent,
+  closeDuplicates,
 }: PlanParams): SweepPlan {
   const capacity = estimateCapacity({ windowHeight, fixedHeight, rowHeight });
   const target = targetRows(capacity, keepPercent);
+  // 重複は使用率に関係なく先に閉じ、その後の行数で使用率スイープを判定する
+  const duplicateIds = closeDuplicates ? selectDuplicates({ tabs, groups }) : [];
+  const duplicates = new Set(duplicateIds);
+  const remaining = tabs.filter((t) => !duplicates.has(t.id));
+  const sweepIds = selectSweep({ tabs: remaining, groups, target });
   return {
     capacity,
     used: usedRows(tabs, groups),
     target,
-    closeIds: selectSweep({ tabs, groups, target }),
+    duplicateIds,
+    closeIds: [...duplicateIds, ...sweepIds],
   };
 }

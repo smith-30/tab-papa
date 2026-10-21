@@ -6,6 +6,7 @@ import type { TabInfo } from '../src/lib/sweep';
 function tab(id: number, overrides: Partial<TabInfo> = {}): TabInfo {
   return {
     id,
+    url: `https://example.com/${id}`,
     pinned: false,
     active: false,
     audible: false,
@@ -15,8 +16,16 @@ function tab(id: number, overrides: Partial<TabInfo> = {}): TabInfo {
   };
 }
 
+const dup = (id: number) => tab(id, { url: 'https://example.com/same' });
+
 // 容量 = (1000 − 100) ÷ 30 = 30 行
-const base = { windowHeight: 1000, fixedHeight: 100, rowHeight: 30, groups: [] };
+const base = {
+  windowHeight: 1000,
+  fixedHeight: 100,
+  rowHeight: 30,
+  groups: [],
+  closeDuplicates: false,
+};
 
 describe('planSweep', () => {
   it('容量・使用行数・目標行数・閉じる対象を返す', () => {
@@ -26,6 +35,7 @@ describe('planSweep', () => {
       capacity: 30,
       used: 5,
       target: 3,
+      duplicateIds: [],
       closeIds: [1, 2],
     });
   });
@@ -48,5 +58,39 @@ describe('planSweep', () => {
     const plan = planSweep({ ...base, windowHeight: 50, tabs, keepPercent: 80 });
     expect(plan.capacity).toBe(0);
     expect(plan.closeIds).toEqual([3]);
+  });
+
+  describe('重複タブ', () => {
+    it('使用率が目標以内でも、重複は強制的に閉じる(古いほうを先に)', () => {
+      const tabs = [dup(1), dup(2), tab(3)];
+      const plan = planSweep({ ...base, tabs, keepPercent: 100, closeDuplicates: true });
+      expect(plan.duplicateIds).toEqual([1]);
+      expect(plan.closeIds).toEqual([1]);
+    });
+
+    it('重複を閉じたあとの行数で使用率スイープを判定する', () => {
+      // 5 タブ中 2 つが重複 → 重複 1 枚を閉じて使用 4 行。目標 4 行なので追加のスイープは無い
+      const tabs = [dup(1), dup(2), tab(3), tab(4), tab(5)];
+      const plan = planSweep({ ...base, tabs, keepPercent: 14, closeDuplicates: true });
+      expect(plan.target).toBe(4);
+      expect(plan.used).toBe(5);
+      expect(plan.closeIds).toEqual([1]);
+    });
+
+    it('目標を超えていれば、重複に続けて古い順にスイープする', () => {
+      const tabs = [dup(1), dup(2), tab(3), tab(4), tab(5)];
+      // 目標 2 行: 重複 1 を閉じたあと 4 行 → さらに古い 2, 3 を閉じる(アクティブなど保護は無し)
+      const plan = planSweep({ ...base, tabs, keepPercent: 7, closeDuplicates: true });
+      expect(plan.target).toBe(2);
+      expect(plan.closeIds).toEqual([1, 2, 3]);
+      expect(plan.duplicateIds).toEqual([1]);
+    });
+
+    it('closeDuplicates が false なら重複を閉じない', () => {
+      const tabs = [dup(1), dup(2)];
+      const plan = planSweep({ ...base, tabs, keepPercent: 100, closeDuplicates: false });
+      expect(plan.duplicateIds).toEqual([]);
+      expect(plan.closeIds).toEqual([]);
+    });
   });
 });

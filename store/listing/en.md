@@ -28,6 +28,7 @@ FEATURES
 - Protected tabs: pinned tabs, the active tab, tabs playing audio and tabs in collapsed groups are never closed.
 - Tab-group aware: group header rows are counted too.
 - Preview before closing: the popup lists, by title, the tabs that would be closed with your current settings.
+- Closes duplicate tabs: for tabs with the same URL, keeps only the one you viewed last (pinned, active and similar tabs are never closed).
 - Sorts by domain: after tidying, tabs are ordered by domain (pinned tabs and tabs inside groups are left alone). Can be turned off in settings.
 
 SETTINGS
@@ -37,7 +38,7 @@ SETTINGS
 
 PRIVACY
 - No communication with any external server.
-- To sort by domain, the host name of each tab's URL is read transiently; Titles are read only to show the preview in the popup. Neither is ever stored or sent.
+- To detect duplicates and sort by domain, each tab's URL is read transiently; Titles are read only to show the preview in the popup. Neither is ever stored or sent.
 - Only your settings are saved, on your device (chrome.storage).
 
 OPEN SOURCE
@@ -53,7 +54,7 @@ Automatically close tabs that overflow Chrome's vertical tab list while the brow
 
 | Permission | Reason |
 |---|---|
-| `tabs` | Reads each tab's last-accessed time and pinned / active / audible state to choose which tabs to close, closes them, moves tabs to sort them by domain, and reads titles to show which tabs would be closed in the popup (never stored or sent). |
+| `tabs` | Reads each tab's URL, last-accessed time and pinned / active / audible state to choose which tabs to close (duplicates and stale tabs), closes them, moves tabs to sort them by domain, and reads titles to show which tabs would be closed in the popup (never stored or sent). |
 | `tabGroups` | Reads whether groups are collapsed so rows (including group header rows) are counted correctly. |
 | `storage` | Saves settings (keep ratio, row height, etc.) on the device. |
 | `alarms` | Waits a set time after Chrome loses focus before sweeping (service workers are terminated, so timers cannot be used). |

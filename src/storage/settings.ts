@@ -3,6 +3,7 @@ import { DEFAULT_SETTINGS, MIN_ALARM_SECONDS } from '../config';
 export type Settings = {
   enabled: boolean;
   sortByDomain: boolean;
+  closeDuplicates: boolean;
   keepPercent: number;
   rowHeight: number;
   fixedHeight: number;
@@ -23,6 +24,7 @@ export function normalizeSettings(raw: unknown): Settings {
   return {
     enabled: typeof r.enabled === 'boolean' ? r.enabled : d.enabled,
     sortByDomain: typeof r.sortByDomain === 'boolean' ? r.sortByDomain : d.sortByDomain,
+    closeDuplicates: typeof r.closeDuplicates === 'boolean' ? r.closeDuplicates : d.closeDuplicates,
     keepPercent: Math.min(100, Math.max(0, pickNumber(r.keepPercent, d.keepPercent))),
     rowHeight: Math.max(1, pickNumber(r.rowHeight, d.rowHeight)),
     fixedHeight: Math.max(0, pickNumber(r.fixedHeight, d.fixedHeight)),
