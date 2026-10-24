@@ -30,5 +30,5 @@ for lang in "${LANGS[@]}"; do
   # プロモーション画像
   shot "$lang" promo-small "$ROOT/promo/$lang/small-440x280.png"    440  280
   shot "$lang" marquee     "$ROOT/promo/$lang/marquee-1400x560.png" 1400 560
-  shot "$lang" 01_hero     "$ROOT/promo/$lang/social-preview-1280x640.png" 1280 640
+  shot "$lang" 01_hero     "$ROOT/promo/$lang/social-preview-1280x800.png" 1280 800
 done
