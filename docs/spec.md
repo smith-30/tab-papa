@@ -104,11 +104,11 @@ Chrome を触っていないときだけ実行し、ブラウジング中は実�
 
 ## 多言語
 
-日本語(既定)と英語。Chrome の UI 言語に従い、`chrome.i18n`(`_locales/<locale>/messages.json`)で解決する。
+日本語と英語。Chrome の UI 言語に従い、`chrome.i18n`(`_locales/<locale>/messages.json`)で解決する。
 
 - 文言の単一ソースは `src/locales.ts`。`pnpm build` / `pnpm dev` 時に `vite.config.ts` の `gen-locales` プラグインが `public/_locales/` を生成する(gitignore 済み)。
-- manifest の `description` は `__MSG_appDesc__`、`default_locale` は `ja`。
-- 対応外の言語は日本語になる。dev・テストでは `_locales` が無いため日本語にフォールバックする。
+- manifest の `description` は `__MSG_appDesc__`、`default_locale` は `en`。
+- 日本語・英語以外の UI 言語の利用者には英語が出る。dev・テストでは `_locales` が無いため、`t()` が日本語にフォールバックする(配布ビルドには影響しない)。
 - ストア掲載文は `store/listing/ja.md` と `en.md`、画像は `store/screenshots/{ja,en}/` と `store/promo/{ja,en}/`。
 
 ## 権限

@@ -7,7 +7,7 @@ const manifest: ManifestV3Export = {
   name: 'tab-papa',
   version: pkg.version,
   description: '__MSG_appDesc__',
-  default_locale: 'ja',
+  default_locale: 'en',
   icons: {
     '16': 'icons/icon-16.png',
     '32': 'icons/icon-32.png',
