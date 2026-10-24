@@ -14,6 +14,8 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  /* background-clip: text は背景の描画範囲までしか文字が出ないため、g / y / p などの下端が欠けないよう余白を足す */
+  padding-bottom: 0.16em;
 }
 .muted { color: #a1a1aa; }
 .pill {

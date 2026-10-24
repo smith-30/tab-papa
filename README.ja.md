@@ -11,7 +11,7 @@
 
 Chrome の**縦タブ一覧があふれないように保つ**拡張機能(Manifest V3)。Chrome を離れている間に、重複タブや古いタブをそっと閉じて、一覧をスクロール不要に保ちます。
 
-<img src="store/screenshots/04_settings.png" width="640" alt="tab-papa のポップアップ"/>
+<img src="store/screenshots/ja/04_settings.png" width="640" alt="tab-papa のポップアップ"/>
 
 ## 仕組み
 

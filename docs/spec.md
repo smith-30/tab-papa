@@ -109,7 +109,7 @@ Chrome を触っていないときだけ実行し、ブラウジング中は実�
 - 文言の単一ソースは `src/locales.ts`。`pnpm build` / `pnpm dev` 時に `vite.config.ts` の `gen-locales` プラグインが `public/_locales/` を生成する(gitignore 済み)。
 - manifest の `description` は `__MSG_appDesc__`、`default_locale` は `ja`。
 - 対応外の言語は日本語になる。dev・テストでは `_locales` が無いため日本語にフォールバックする。
-- ストア掲載文は `store/listing/ja.md` と `en.md`(画像は日本語のみ)。
+- ストア掲載文は `store/listing/ja.md` と `en.md`、画像は `store/screenshots/{ja,en}/` と `store/promo/{ja,en}/`。
 
 ## 権限
 

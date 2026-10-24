@@ -11,7 +11,7 @@
 
 A Chrome extension (Manifest V3) that keeps your **vertical tab list from overflowing**. While you are away from Chrome, it quietly closes duplicate and old tabs so the list fits without scrolling.
 
-<img src="store/screenshots/04_settings.png" width="640" alt="tab-papa popup"/>
+<img src="store/screenshots/en/04_settings.png" width="640" alt="tab-papa popup"/>
 
 ## How it works
 
