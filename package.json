@@ -1,6 +1,6 @@
 {
   "name": "tab-papa",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Smart tab-count management for Chrome vertical tabs mode",
   "private": true,
   "scripts": {
