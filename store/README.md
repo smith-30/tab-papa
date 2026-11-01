@@ -27,7 +27,6 @@ rsvg-convert -w 128 -h 128 store/icon.svg -o public/icons/icon-128.png   # ア�
 
 - [ ] `listing/*.md` の機能説明が実装と一致している(設定のポップアップ画面は未実装。実装後に設定の項を確認)
 - [x] ポップアップの実画面スクリーンショット(`04_settings`)。`01`〜`03` はイメージ図で、`01` の縦タブ一覧のイラストは Chrome 本体の画面であり拡張の UI ではない
-- [ ] 行の高さ・固定分の初期値を実機で確定する
 - [x] 英語版の画像(`screenshots/en/`、`promo/en/`)
 - [ ] `make release-major` で 1.0.0 を切り、GitHub Release の ZIP をダッシュボードへアップロードする(`pnpm build` 済みの本番ビルドであること。`build:debug` の `dist/` は使わない)
 - [ ] リポジトリ公開後、掲載文の「GitHub で公開」にリンクを足す

@@ -18,7 +18,6 @@ function toTabInfo(tab: chrome.tabs.Tab): TabInfo | undefined {
 
 export type WindowSnapshot = {
   windowId: number;
-  windowHeight: number;
   tabs: TabInfo[];
   groups: GroupInfo[];
   /** タブ id → タイトル(ポップアップのプレビュー表示用。保存・送信はしない) */
@@ -29,7 +28,7 @@ export type WindowSnapshot = {
 export async function loadWindowSnapshot(
   win: chrome.windows.Window,
 ): Promise<WindowSnapshot | undefined> {
-  if (win.id === undefined || win.type !== 'normal' || win.height === undefined) return undefined;
+  if (win.id === undefined || win.type !== 'normal') return undefined;
 
   const [tabs, groups] = await Promise.all([
     chrome.tabs.query({ windowId: win.id }),
@@ -41,7 +40,6 @@ export async function loadWindowSnapshot(
   }
   return {
     windowId: win.id,
-    windowHeight: win.height,
     tabs: tabs.map(toTabInfo).filter((t): t is TabInfo => t !== undefined),
     groups: groups.map((g) => ({ id: g.id, collapsed: g.collapsed })),
     titles,
@@ -50,8 +48,6 @@ export async function loadWindowSnapshot(
 
 export type SweepResult = {
   windowId: number;
-  windowHeight: number;
-  capacity: number;
   used: number;
   target: number;
   duplicates: number;
@@ -70,8 +66,6 @@ export async function sweepWindow(
   if (plan.closeIds.length > 0) await chrome.tabs.remove(plan.closeIds);
   return {
     windowId: snapshot.windowId,
-    windowHeight: snapshot.windowHeight,
-    capacity: plan.capacity,
     used: plan.used,
     target: plan.target,
     duplicates: plan.duplicateIds.length,

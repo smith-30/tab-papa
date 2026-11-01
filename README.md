@@ -16,15 +16,15 @@ A Chrome extension (Manifest V3) that keeps your **vertical tab list from overfl
 ## How it works
 
 1. You switch to another app, and Chrome loses focus.
-2. After a short wait (60 seconds by default), tab-papa estimates how many rows fit in your vertical tab list from the window height.
-3. It closes duplicate tabs, then closes the least recently used tabs until the list uses at most N% of those rows (80% by default).
+2. After a short wait (60 seconds by default), tab-papa checks each window.
+3. It closes duplicate tabs, then closes the least recently used tabs until the window has at most N rows (30 by default).
 4. It then sorts the remaining tabs by domain.
 
 Coming back to Chrome cancels a pending run, so tabs are never closed while you browse.
 
 ## Features
 
-- **Sweep by usage** — keeps the vertical tab list at N% of what fits on screen, closing the least recently used tabs first.
+- **Sweep by count** — keeps each window at N tabs (group headers count too), closing the least recently used tabs first.
 - **Duplicate tabs** — tabs with the same URL in a window are closed, keeping the one you viewed last.
 - **Sort by domain** — orders ungrouped tabs by domain after tidying.
 - **Preview** — the popup lists exactly which tabs would be closed with your current settings.
@@ -40,9 +40,9 @@ Open the popup from the toolbar icon. Changes are saved immediately to `chrome.s
 |---|---|---|
 | Auto tidy | on | on / off |
 | Wait before tidying | 60 sec | 30–600 sec |
-| Vertical tab usage | 80% | 10–100% |
+| Tabs to keep | 30 | 5–100 |
 
-> Extensions cannot read the real size of Chrome's vertical tab strip, so the number of rows that fit is an estimate (window height, an assumed row height of 32 px and 120 px of fixed UI). If it is off for your setup, adjust `rowHeight` / `fixedHeight` in `src/config.ts`.
+> Extensions cannot read the real size of Chrome's vertical tab strip, so tab-papa does not guess how many rows fit. Set the number that suits your screen.
 
 ## Development
 
@@ -75,7 +75,6 @@ src/
 ├── config.ts        # Default settings and constants
 ├── locales.ts       # UI strings (ja / en), source of the generated _locales
 ├── lib/             # Pure logic with no Chrome API dependency (unit-tested)
-│   ├── capacity.ts    #   rows that fit, target rows
 │   ├── duplicates.ts  #   duplicate tab selection
 │   ├── sweep.ts       #   used rows, which tabs to close
 │   ├── plan.ts        #   one window's plan (shared by sweep and popup preview)

@@ -18,7 +18,6 @@ src/
   config.ts          設定の初期値・定数(閾値はここに集約)
   locales.ts         UI 文言の単一ソース(ja / en)。_locales の生成元
   lib/               Chrome API に依存しない純粋関数
-    capacity.ts        容量の推定・目標行数
     sweep.ts           使用行数の計算・スイープ対象の選定
     duplicates.ts      重複タブ(同一 URL)の選定
     localeMessages.ts  文言を Chrome の messages.json 形式へ変換
@@ -30,7 +29,7 @@ src/
     tabs.ts            chrome.tabs / tabGroups / windows との変換・スナップショット取得・スイープと並べ替えの実行
   background/
     index.ts           Service Worker。フォーカス検知と alarms の配線
-  popup/               ポップアップ UI(自動整理のオン/オフ・待ち時間・使用率)。i18n.ts は t()
+  popup/               ポップアップ UI(自動整理のオン/オフ・待ち時間・維持するタブ数)。i18n.ts は t()
 tests/                 vitest。lib は node 環境、コンポーネントは jsdom(chrome.storage は tests/helpers/chrome.ts でモック)
 docs/                  仕様・構成
 store/                 Chrome Web Store 提出素材(掲載文・画像テンプレート・生成画像)。詳細は store/README.md
@@ -56,9 +55,8 @@ windows.onFocusChanged(NONE)
   → 各通常ウィンドウ:
       tabs.query + tabGroups.query    chrome/tabs.ts
       → TabInfo / GroupInfo に変換
-      → estimateCapacity → targetRows lib/capacity.ts
       → selectDuplicates(重複を先に)  lib/duplicates.ts
-      → selectSweep(残りを使用率で)   lib/sweep.ts
+      → selectSweep(残りを N 行まで)  lib/sweep.ts
       → tabs.remove(ids)
   → 各通常ウィンドウ(sortByDomain 有効時):
       tabs.query で取り直し → planDomainSort   lib/domainSort.ts

@@ -8,11 +8,12 @@ import { t } from './i18n';
 
 const MAX_DELAY_SECONDS = 600;
 const DELAY_STEP = 10;
-const MIN_KEEP_PERCENT = 10;
-const KEEP_STEP = 5;
+const MIN_MAX_ROWS = 5;
+const MAX_MAX_ROWS = 100;
+const ROWS_STEP = 5;
 const PREVIEW_LIMIT = 8;
 
-type NumericSetting = 'delaySeconds' | 'keepPercent';
+type NumericSetting = 'delaySeconds' | 'maxRows';
 
 type SliderProps = {
   field: NumericSetting;
@@ -161,14 +162,14 @@ export function App() {
         onChange={update}
       />
       <Slider
-        field="keepPercent"
-        label={t('keepLabel')}
-        hint={t('keepHint')}
-        value={settings.keepPercent}
-        display={t('keepValue', [String(settings.keepPercent)])}
-        min={MIN_KEEP_PERCENT}
-        max={100}
-        step={KEEP_STEP}
+        field="maxRows"
+        label={t('maxLabel')}
+        hint={t('maxHint')}
+        value={settings.maxRows}
+        display={t('maxValue', [String(settings.maxRows)])}
+        min={MIN_MAX_ROWS}
+        max={MAX_MAX_ROWS}
+        step={ROWS_STEP}
         onChange={update}
       />
       {settings.enabled ? (

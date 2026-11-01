@@ -21,11 +21,11 @@ When your vertical tab list has grown long enough to scroll, tab-papa closes dup
 
 ■ FEATURES
 
-・Usage sweep
-  Estimates how many rows fit in your vertical tab list from the window height. Anything beyond a set share of it (80% by default) is closed, least recently viewed first.
+・Tab count sweep
+  In each window, tabs beyond your limit (30 by default; each group header counts as one) are closed, least recently viewed first.
 
 ・Duplicate close
-  If a window has several tabs with the same URL, only the one you viewed last is kept. This happens regardless of the usage setting.
+  If a window has several tabs with the same URL, only the one you viewed last is kept. This happens regardless of the tab limit.
 
 ・Domain sort
   After tidying, tabs are sorted by domain. Pinned tabs and tabs inside groups are left where they are.
@@ -59,9 +59,9 @@ Customize from the popup:
 
 ・Auto tidy on/off
 ・Wait before tidying (default 60 sec, 30–600 sec)
-・Vertical tab usage (default 80%, 10–100%)
+・Tabs to keep (default 30, 5–100)
 
-Note: extensions cannot read the real size of the vertical tab list, so the number of rows that fit is an estimate based on the window height.
+Note: extensions cannot read the real size of the vertical tab list, so set the number that suits your screen.
 
 ## Single purpose
 

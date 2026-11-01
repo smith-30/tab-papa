@@ -11,14 +11,14 @@ describe('normalizeSettings', () => {
   });
 
   it('指定された項目だけ上書きされる', () => {
-    expect(normalizeSettings({ keepPercent: 70 })).toEqual({
+    expect(normalizeSettings({ maxRows: 70 })).toEqual({
       ...DEFAULT_SETTINGS,
-      keepPercent: 70,
+      maxRows: 70,
     });
   });
 
   it('型が違う項目は初期値に戻る', () => {
-    const s = normalizeSettings({ keepPercent: '70', enabled: 'yes', rowHeight: Number.NaN });
+    const s = normalizeSettings({ maxRows: '70', enabled: 'yes', delaySeconds: Number.NaN });
     expect(s).toEqual(DEFAULT_SETTINGS);
   });
 
@@ -34,13 +34,15 @@ describe('normalizeSettings', () => {
     expect(normalizeSettings({ closeDuplicates: 1 }).closeDuplicates).toBe(true);
   });
 
-  it('keepPercent は 0〜100 にクランプ', () => {
-    expect(normalizeSettings({ keepPercent: 150 }).keepPercent).toBe(100);
-    expect(normalizeSettings({ keepPercent: -5 }).keepPercent).toBe(0);
+  it('maxRows は 1 以上の整数', () => {
+    expect(normalizeSettings({ maxRows: 0 }).maxRows).toBe(1);
+    expect(normalizeSettings({ maxRows: -5 }).maxRows).toBe(1);
+    expect(normalizeSettings({ maxRows: 12.7 }).maxRows).toBe(12);
   });
 
-  it('rowHeight は 1px 以上', () => {
-    expect(normalizeSettings({ rowHeight: 0 }).rowHeight).toBe(1);
+  it('v1.0 の使用率・行高の設定は無視して初期値になる', () => {
+    const old = { keepPercent: 60, rowHeight: 20, fixedHeight: 90 };
+    expect(normalizeSettings(old)).toEqual(DEFAULT_SETTINGS);
   });
 
   it('delaySeconds は alarms の最短(30 秒)以上', () => {

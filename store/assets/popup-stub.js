@@ -46,7 +46,7 @@ const tabs = TITLES.map((title, i) => ({
   // id が小さいほど古い(= 先に閉じる候補)
   lastAccessed: (i + 1) * 1000,
 }));
-const store = { settings: { keepPercent: 60, delaySeconds: 60, rowHeight: 32, fixedHeight: 120 } };
+const store = { settings: { maxRows: 10, delaySeconds: 60 } };
 window.chrome = {
   // 実機の chrome.i18n 相当。生成済み messages.json の `$N$` を第 1 引数で置換する
   i18n: {
